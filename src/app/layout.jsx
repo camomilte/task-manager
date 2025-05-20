@@ -1,7 +1,6 @@
 // Import styling
 import "./globals.css";
-import { Pacifico, Abril_Fatface, Urbanist } from 'next/font/google'
-
+import { Pacifico, Abril_Fatface, Urbanist } from 'next/font/google';
 
 // Import components
 import Providers from "@/components/providers.jsx";
@@ -37,10 +36,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${pacifico.variable} ${abril_fatface.variable} ${urbanist.variable}`}
+        className={`${pacifico.variable} ${abril_fatface.variable} ${urbanist.variable} font-urbanist`}
       >
         <Providers>
-          {children}
+          <div className="wrapper">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
