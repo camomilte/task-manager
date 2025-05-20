@@ -25,7 +25,7 @@ try {
         localCache: persistentLocalCache({
             tabManager: persistentMultipleTabManager(),
             cacheSizeBytes: CACHE_SIZE_UNLIMITED
-        });
+        })
     });
 } catch (error) {
     // Fallback to regular Firestore if local caching fails
