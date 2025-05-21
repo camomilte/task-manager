@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${pacifico.variable} ${abril_fatface.variable} ${urbanist.variable} font-urbanist`}
+        className={`${pacifico.variable} ${abril_fatface.variable} ${urbanist.variable} font-urbanist min-h-screen`}
       >
         <Providers>
           <div className="wrapper">
