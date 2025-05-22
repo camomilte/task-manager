@@ -27,18 +27,23 @@ export const loginFormSchema = z.object({
 });
 
 
-
+/// /
+// Login form component with validation and submission handling
+/// /
 export const LoginForm = ({ changeForm }) => {
+    // Local state to manage and display any error
     const [errorMessage, setErrorMessage] = useState(null);
 
+    // Initialize form
     const form = useForm({
-        resolver: zodResolver(loginFormSchema),
+        resolver: zodResolver(loginFormSchema), // Use Zod schema validation
         defaultValues: {
-            email: "",
-            password: ""
+            email: "", // Default value for email field
+            password: "" // Default value for password field
         }
     });
 
+    // Submit handler triggered when the form is successfully validated and submitted
     function onSubmit(values) {
         console.log(values)
     }

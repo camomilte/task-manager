@@ -1,16 +1,20 @@
+"use client"
+
+import { useAuth } from '@/context/authContext';
 import React from 'react';
 
 function AppLayout({ authenticated, unAuth }) {
 
-    const user = null;
+    const { user } = useAuth();
 
     return (
         <>
             {
                 user === null
-                ? unAuth 
+                ? unAuth
                 : authenticated
             }
+        
         </>
     )
 }

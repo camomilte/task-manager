@@ -11,13 +11,16 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+// Import context
+import { useAuth } from "@/context/authContext";
+import { getFirebaseError } from "@/lib/getFirebaseError";
 
 
 // Define schema for validation of register form
@@ -40,6 +43,7 @@ export const registerFormSchema = z.object({
 
 export const RegisterForm = ({ changeForm }) => {
     const [errorMessage, setErrorMessage] = useState(null);
+    const { register, loading } = useAuth();
 
     const form = useForm({
         resolver: zodResolver(registerFormSchema),
@@ -51,8 +55,15 @@ export const RegisterForm = ({ changeForm }) => {
         }
     });
 
-    function onSubmit(values) {
-        console.log(values)
+    async function onSubmit(values) {
+        try {
+            const { email, password, userName } = values;
+            await register(email, password, userName);
+            
+        } catch (error) {
+            const errorMessage = getFirebaseError(error.code);
+            setErrorMessage(errorMessage);
+        }
     }
 
   return (
@@ -117,7 +128,9 @@ export const RegisterForm = ({ changeForm }) => {
                 )}
                 />
                 <p className="text-background">Already have an account? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Log in here!</span></p>
-                <Button type="submit" variant="secondary" size="lg" className="font-pacifico">Submit</Button>
+                
+                {/* ----- SUBMIT ----- */}
+                <Button  type="submit" variant="secondary" size="lg" className="font-pacifico">Submit</Button>
             
             </form>
         </Form>
