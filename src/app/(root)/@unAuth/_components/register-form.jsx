@@ -153,7 +153,7 @@ export const RegisterForm = ({ changeForm }) => {
                 <p className="text-background">Already have an account? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Log in here!</span></p>
                 
                 {/* ----- SUBMIT ----- */}
-                <Button  type="submit" variant="secondary" size="lg" className="font-pacifico">Submit</Button>
+                <Button disabled={loading} type="submit" variant="secondary" size="lg" className="font-pacifico">Submit</Button>
             
             </form>
         </Form>
