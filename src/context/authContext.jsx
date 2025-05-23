@@ -2,8 +2,9 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 // Import React hooks and functions
 const { createContext, useContext, useState, useEffect } = require("react");
@@ -19,6 +20,9 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     // Prevents rendering until authentication status is known
     const [authLoaded, setAuthLoaded] = useState(false);
+
+    // Create router
+    const router = useRouter();
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -78,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     // Function to register user
     /// /
     const register = async (email, password, userName) => {
-        // Set loading state to true to indicate process hhas started
+        // Set loading state to true to indicate process has started
         setLoading(true);
 
         try {
@@ -113,19 +117,53 @@ export const AuthProvider = ({ children }) => {
             console.log("Error when registering user: ", error);
             // Rethrow error
             throw error;
-            
+
         } finally {
             // Reset loading state to false regardless if successfull or not
             setLoading(false);
         }
-    }
+    };
+
+    /// /
+    // Function to log out user
+    /// /
+    const logout = async () => {
+        // Navigate user to home page
+        router.replace("/");
+        // Sign out user from Firebase Authentication
+        await signOut(auth);
+    };
+
+    /// /
+    // Function to log in user
+    /// /
+    const login = async (email, password) => {
+        // Set loading state to true to indicate process has started
+        setLoading(true);
+
+        try {
+            // Attempt signing in user with Firebase Authentication
+            await signInWithEmailAndPassword(auth, email, password);
+
+        } catch (error) {
+            // Console log error
+            console.log("Error signing in: ", error);
+            // Rethrow error
+            throw error;
+        } finally {
+            // Reset loading state to false regardless if successfull or not
+            setLoading(false);
+        }
+    };
 
     // Define value
     const value = {
         user,
         loading,
         authLoaded,
-        register
+        register,
+        logout,
+        login
     };
 
     // Provide context value to children components

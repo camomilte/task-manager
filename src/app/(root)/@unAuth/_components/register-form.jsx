@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 
 // Import context
 import { useAuth } from "@/context/authContext";
+
+// Import user-friendly error messages
 import { getFirebaseError } from "@/lib/getFirebaseError";
 
 
@@ -42,9 +44,12 @@ export const registerFormSchema = z.object({
 
 
 export const RegisterForm = ({ changeForm }) => {
+    // Store and display any error messages
     const [errorMessage, setErrorMessage] = useState(null);
+    // Access authentication logic
     const { register, loading } = useAuth();
 
+    // Initialize form
     const form = useForm({
         resolver: zodResolver(registerFormSchema),
         defaultValues: {
@@ -55,13 +60,22 @@ export const RegisterForm = ({ changeForm }) => {
         }
     });
 
+    /// /
+    // Function to handle submission
+    /// /
     async function onSubmit(values) {
         try {
+            // Destructure values from submission
             const { email, password, userName } = values;
+
+            // Attempt to register user
             await register(email, password, userName);
             
         } catch (error) {
+            // Convert Firebase error code to user-friendly message
             const errorMessage = getFirebaseError(error.code);
+
+            // Set error message
             setErrorMessage(errorMessage);
         }
     }
@@ -69,6 +83,15 @@ export const RegisterForm = ({ changeForm }) => {
   return (
     <>
         <h3 className='text-primary-foreground text-3xl font-abril-fat pb-10'>Register an account </h3>
+        {
+            errorMessage && 
+            <Alert variant="destructive" className="mb-5 border-2 border-destructive/60">
+                <TbAlertCircleFilled className="h-4 w-4" />
+                <AlertDescription className="font-semibold">
+                    { errorMessage }
+                </AlertDescription>
+            </Alert>     
+        }
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 {/* ----- USERNAME ----- */}

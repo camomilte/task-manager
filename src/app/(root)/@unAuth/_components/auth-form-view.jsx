@@ -8,7 +8,7 @@ import { RegisterForm } from "./register-form";
 
 export const AuthFormView = () => {
 
-    const [showLogin, setShowLogin] = useState(false);
+    const [showLogin, setShowLogin] = useState(true);
 
     const changeForm = (formName) => {
         if(formName === "login") {

@@ -6,7 +6,8 @@ import { Controller, FormProvider, useFormContext, useFormState } from "react-ho
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
 
-import { IoAlertCircle } from "react-icons/io5";
+import { Alert, AlertDescription } from "./alert";
+import { TbAlertCircleFilled } from "react-icons/tb";
 
 const Form = FormProvider
 
@@ -124,13 +125,16 @@ function FormMessage({
   }
 
   return (
-    <p
-      data-slot="form-message"
-      id={formMessageId}
-      className={cn("text-destructive text-sm font-bold", className)}
-      {...props}>
-      {body}
-    </p>
+    <Alert variant="destructive" className="border-2 border-destructive/60">
+        <TbAlertCircleFilled className="h-4 w-4" />
+        <AlertDescription
+          data-slot="form-message"
+          id={formMessageId}
+          className={cn("text-destructive text-sm font-semibold", className)}
+          {...props}>
+            { body }
+        </AlertDescription>
+    </Alert>
   );
 }
 
