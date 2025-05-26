@@ -164,7 +164,7 @@
 }
 
 .nav-btn {
-  @apply h-13 px-9 text-xl
+  @apply h-10 px-6 text-base
 }
 
 .nav-btn-mobile {

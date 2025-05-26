@@ -20,7 +20,7 @@ import { useAuth } from "@/context/authContext";
 
 export const AvatarDropdown = () => {
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div>
@@ -28,8 +28,8 @@ export const AvatarDropdown = () => {
         <DropdownMenuTrigger>
           <Avatar>
             <AvatarImage src={user?.photoURL || "" }/>
-            <AvatarFallback className="bg-primary p-0 size-13">
-                <FaUser className="size-5 text-background"/>  
+            <AvatarFallback className="bg-primary p-0 size-13 md:size-10">
+                <FaUser className="size-5 md:size-4 text-background"/>  
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -47,7 +47,7 @@ export const AvatarDropdown = () => {
               Settings
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="bg-accent text-background font-bold hover:underline hover:bg-primary"> 
+          <DropdownMenuItem onClick={logout} className="bg-accent text-background font-bold hover:underline hover:bg-primary"> 
               <TbLogout className="text-inherit"/>
               Log out
           </DropdownMenuItem>

@@ -12,15 +12,16 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { AvatarDropdown } from "./avatardropdown";
+import { useAuth } from "@/context/authContext";
 
 export const Navbar = () => {
 
-  const isAdmin = false;
+  const { isAdmin } = useAuth();
 
   return (
     <nav className="flex items-center justify-between py-5">
       {/* ---- DESKTOP LOGO ---- */}
-      <Link href="/" className={cn(" hidden md:block font-pacifico text-4xl text-primary")}>
+      <Link href="/" className={cn(" hidden md:block font-pacifico text-3xl text-primary")}>
         <span>Task Manager</span>
       </Link>
       {/* ---- MOBILE LOGO ---- */}
@@ -33,14 +34,14 @@ export const Navbar = () => {
       </Link>
       
       {/* ---- DESKTOP NAV RIGHT ----- */}
-      <div className="hidden md:flex gap-6">
+      <div className="hidden md:flex gap-6 items-center">
         <Button asChild className="nav-btn">
             <Link href="/tasks">Tasks</Link>
         </Button>
 
         {/* ---- ADMIN ONLY ---- */}
         {
-          isAdmin && (
+          isAdmin() && (
             <>
               <Button asChild className="nav-btn">
                 <Link href="/all">Users</Link>
@@ -52,9 +53,7 @@ export const Navbar = () => {
           )
         }
 
-        <Button asChild className="rounded-full p-0 size-13">
-          <Link href="/profile"><FaUser className="size-5"/></Link>
-        </Button>
+        <AvatarDropdown />
       </div>
 
       {/* ---- MOBILE NAV RIGHT ---- */}
@@ -65,7 +64,7 @@ export const Navbar = () => {
 
         {/* ---- ADMIN ONLY ---- */}
         {
-          isAdmin && (
+          isAdmin() && (
             <>
               <Button asChild className="nav-btn-mobile">
                 <Link href="/all"><FaUsers className="size-5"/></Link>
@@ -76,11 +75,6 @@ export const Navbar = () => {
             </>
           )
         }
-
-        {/* <Button asChild className="nav-btn-mobile">
-          <Link href="/profile"><FaUser className="size-5"/></Link>
-        </Button> */}
-
         <AvatarDropdown />
       </div>
     </nav>

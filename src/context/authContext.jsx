@@ -156,6 +156,16 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    /// /
+    // Function to check admin role
+    /// /
+    const isAdmin = () => {
+        // If there is no user, return false
+        if(!user) return false;
+        // Return user role if it has role admin
+        return user.role === "admin";
+    };
+
     // Define value
     const value = {
         user,
@@ -163,7 +173,8 @@ export const AuthProvider = ({ children }) => {
         authLoaded,
         register,
         logout,
-        login
+        login,
+        isAdmin
     };
 
     // Provide context value to children components
