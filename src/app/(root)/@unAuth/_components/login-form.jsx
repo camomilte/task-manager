@@ -88,8 +88,7 @@ export const LoginForm = ({ changeForm }) => {
                 <AlertDescription className="font-semibold">
                     { errorMessage }
                 </AlertDescription>
-            </Alert>
-              
+            </Alert>     
         }
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

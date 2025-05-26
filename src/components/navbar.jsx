@@ -1,34 +1,87 @@
 "use client"
 
-import Image from "next/image";
-import Link from "next/link";
+// Import media
 import logoIcon from "../../public/logo-icon.svg";
+import { GoTasklist } from "react-icons/go";
+import { FaUser, FaUsers } from "react-icons/fa";
+import { BiSolidAddToQueue } from "react-icons/bi";
+
+// Import functions and components
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { GoTasklist } from "react-icons/go";
+import Image from "next/image";
+import Link from "next/link";
+import { AvatarDropdown } from "./avatardropdown";
 
 export const Navbar = () => {
+
+  const isAdmin = false;
+
   return (
     <nav className="flex items-center justify-between py-5">
-      <Link href="/" className={cn(" hidden sm:block font-pacifico text-5xl text-primary")}>
-        <h1>Task Manager</h1>
+      {/* ---- DESKTOP LOGO ---- */}
+      <Link href="/" className={cn(" hidden md:block font-pacifico text-4xl text-primary")}>
+        <span>Task Manager</span>
       </Link>
-      <Link href="/" className={cn("sm:hidden")}>
+      {/* ---- MOBILE LOGO ---- */}
+      <Link href="/" className={cn("md:hidden")}>
         <Image 
           priority
           src={logoIcon}
           width={48}
           alt="Task Manager logo icon"/>
       </Link>
+      
+      {/* ---- DESKTOP NAV RIGHT ----- */}
+      <div className="hidden md:flex gap-6">
+        <Button asChild className="nav-btn">
+            <Link href="/tasks">Tasks</Link>
+        </Button>
 
-      <div>
-        <Button asChild size="lg" className="hidden sm:flex">
-          <Link href="/tasks">Tasks</Link>
+        {/* ---- ADMIN ONLY ---- */}
+        {
+          isAdmin && (
+            <>
+              <Button asChild className="nav-btn">
+                <Link href="/all">Users</Link>
+              </Button>
+              <Button asChild className="nav-btn">
+                <Link href="/add-task">Add task</Link>
+              </Button>
+            </>
+          )
+        }
+
+        <Button asChild className="rounded-full p-0 size-13">
+          <Link href="/profile"><FaUser className="size-5"/></Link>
         </Button>
-        <Button className="sm:hidden rounded-full h-15 w-15">
-          <Link href="/tasks"><GoTasklist size={48} /></Link>
+      </div>
+
+      {/* ---- MOBILE NAV RIGHT ---- */}
+      <div className="flex gap-4 items-center md:hidden">
+        <Button asChild className="nav-btn-mobile">
+          <Link href="/tasks"><GoTasklist className="size-5" /></Link>
         </Button>
-        
+
+        {/* ---- ADMIN ONLY ---- */}
+        {
+          isAdmin && (
+            <>
+              <Button asChild className="nav-btn-mobile">
+                <Link href="/all"><FaUsers className="size-5"/></Link>
+              </Button>
+              <Button asChild className="nav-btn-mobile">
+                <Link href="/add-task"><BiSolidAddToQueue className="size-5"/></Link>
+              </Button>
+            </>
+          )
+        }
+
+        {/* <Button asChild className="nav-btn-mobile">
+          <Link href="/profile"><FaUser className="size-5"/></Link>
+        </Button> */}
+
+        <AvatarDropdown />
       </div>
     </nav>
   )

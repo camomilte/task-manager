@@ -102,7 +102,7 @@ export const RegisterForm = ({ changeForm }) => {
                     <FormItem>
                     <FormLabel className="text-secondary">Username</FormLabel>
                     <FormControl>
-                        <Input placeholder="Your username" className="bg-background" {...field} />
+                        <Input placeholder="Your username"  {...field} />
                     </FormControl>
                         <FormMessage />
                     </FormItem>
