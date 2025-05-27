@@ -3,8 +3,9 @@
 
 import { auth, db } from "@/lib/firebase";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 // Import React hooks and functions
 const { createContext, useContext, useState, useEffect } = require("react");
@@ -166,6 +167,37 @@ export const AuthProvider = ({ children }) => {
         return user.role === "admin";
     };
 
+    /// /
+    // Function to update user information
+    /// /
+    const updateUser = async (user, newUserData) => {
+        // Set loading state to true to indicate process has started
+        setLoading(true);
+        const toastId = toast.loading("Loading...");
+
+        // Check if user exists
+        if (!user?.uid) {
+            toast.error("Invalid user data.", { id: toastId });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const userRef = doc(db, "users", user.uid)
+            await updateDoc(userRef, newUserData)
+            setUser((prevUser) => ({ ...prevUser, ...newUserData}));
+            toast.success("Profile successfully updated", { id: toastId })
+    
+        } catch (error) {
+            toast.error("Something went wrong, try again.", { id: toastId });
+            console.error("Error updating the user: ", error);
+        } finally {
+            // Reset loading state to false regardless if successfull or not
+            setLoading(false);
+        }
+
+    }
+
     // Define value
     const value = {
         user,
@@ -174,7 +206,8 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         login,
-        isAdmin
+        isAdmin, 
+        updateUser
     };
 
     // Provide context value to children components

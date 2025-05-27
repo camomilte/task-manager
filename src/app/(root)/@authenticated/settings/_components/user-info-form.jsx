@@ -20,10 +20,8 @@ import { Input } from "@/components/ui/input";
 
 // Import context
 import { useAuth } from "@/context/authContext";
+import { Toaster } from "react-hot-toast";
 
-// Import user-friendly error messages
-import { getFirebaseError } from "@/lib/getFirebaseError";
-import { useState } from "react";
 
 // Define schema for validation of form
 const formSchema = z.object({
@@ -36,10 +34,8 @@ const formSchema = z.object({
 
 
 export const UserInfoForm = ({ user }) => {
-      // Store and display any error messages
-      const [errorMessage, setErrorMessage] = useState(null);
       // Access authentication logic
-      /* const {  } = useAuth(); */
+      const { updateUser, loading } = useAuth();
 
   // Initialize form
   const form = useForm({
@@ -50,12 +46,44 @@ export const UserInfoForm = ({ user }) => {
     },
   })
 
+  /// /
+  // Function to handle submission 
+  /// /
   function onSubmit(values) {
-    console.log(values)
+    const newUserData = {
+      userName: values.userName
+    }
+    updateUser(user, newUserData);
   }
 
   return (
     <Form {...form}>
+      <Toaster 
+        toastOptions={{
+          style: {
+            background: 'var(--color-secondary)',
+            color: 'var(--color-text)'
+          },
+          success: {
+            iconTheme: {
+              primary: 'var(--color-primary)',
+              secondary: 'var(--color-background)'
+            }
+          },
+          error: {
+            iconTheme: {
+              primary: 'CC0000',
+              secondary: 'var(--color-background)'
+            }
+          },
+          loading: {
+            iconTheme: {
+              primary: 'var(--color-primary)',
+              secondary: 'var(--color-background)'
+            }
+          }
+        }}
+      />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 my-4">
         <FormField
           control={form.control}
@@ -87,7 +115,7 @@ export const UserInfoForm = ({ user }) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-accent hover:bg-accent-600 font-bold w-full md:text-sm h-13 md:h-10 md:px-8 md:w-auto">Save changes</Button>
+        <Button disabled={loading} type="submit" className="bg-accent hover:bg-accent-600 font-bold w-full md:text-sm h-13 md:h-10 md:px-8 md:w-auto">{ loading ? "Saving..." : "Save changes" } </Button>
       </form>
     </Form>
   )
