@@ -29,7 +29,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
 import { useUsers } from "@/context/usersContext";
 import { useRouter } from "next/navigation";
-import { useTasks } from "@/context/TasksContext";
+import { TasksProvider, useTasks } from "@/context/TasksContext";
 
 // Base schema for all tasks
 const base = z.object({
@@ -96,6 +96,8 @@ export const AddTaskForm = () => {
 
   const reoccuringType = form.watch("reoccuring");
 
+ 
+
   /// /
   // Function to handle submission 
   /// /
@@ -109,7 +111,7 @@ export const AddTaskForm = () => {
     try {
       // Set submission state to true to disable multiple submits while in progress
       setSubmitted(true);
-
+      
       // If task is one-time task
       if(values.reoccuring === "none") {
         // Add a single task for specified date
@@ -313,7 +315,7 @@ export const AddTaskForm = () => {
                 <FormItem>
                     <FormLabel className="text-lg w-1/5">Date</FormLabel>
                         <Calendar
-                          mode="single"
+                          mode="multiple"
                           selected={field.value}
                           onSelect={field.onChange}
                           className="rounded-md border border-primary"

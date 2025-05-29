@@ -1,38 +1,86 @@
 "use client"
 
-import { serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { useAuth } from "./authContext";
+import { format } from "date-fns";
 
 // Import React hooks and functions
-const { createContext, useContext, useState } = require("react");
+const { createContext, useContext, useState, useEffect } = require("react");
 
 // Create context for task data
 const TasksContext = createContext();
 
 export const TasksProvider = ({ children }) => {
   // Store tasks in local state
-  const [tasks, setTasks] = useState(null);
+  const [tasks, setTasks] = useState([]);
   // Tracks the loading state of an async operation 
   const [loading, setLoading] = useState(false);
+  // Get authentication logic
+  const { isAdmin, authLoaded, user } = useAuth();
+
+  useEffect(() => {
+    if(!authLoaded || user) return;
+
+    setLoading(true);
+    
+    let q
+
+    if(isAdmin()) {
+      q = query(collection(db, "tasks"), orderBy("date"), orderBy("order"))
+    } else {
+      q = query(
+        collection(db, "tasks"), 
+        where("ownerId", "==", user.uid),
+        orderBy("date"),
+        orderBy("order")
+      )
+    }
+
+    const unsub = onSnapshot(q, querySnap => {
+      const updatedTasks = querySnap.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      setTasks(updatedTasks);
+      setLoading(false);
+    })
+  }, [isAdmin])
+
+  const getNextOrder = () => {
+    return Math.max(...tasks.map(task => task.order ?? 0), 0) + 1000
+  }
 
   /// / 
   // Function to add tasks
   /// /
   const addTask = async (taskData) => {
-    /* const newTask = {
-      title: ,
-      ownerId: ,
-      date: ,
-      order: ,
-      deadline: ,
-      completed: false,
-      completedAt: null,
-      createdAt: serverTimestamp()
-    } */
+    if(!isAdmin()) return
+    
+    setLoading(true)
+
+    try {
+      const newTask = {
+        ...taskData,
+        date: format(taskData.date, "yyyy-MM-dd"),
+        order: getNextOrder(),
+        completed: false,
+        createdAt: serverTimestamp()
+      }
+
+      await addDoc(collection(db, "tasks"), newTask)
+    } catch (error) {
+      console.log(error);
+      throw error
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Define value
   const value = {
     tasks,
+    addTask,
     loading
   }
 
