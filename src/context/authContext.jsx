@@ -1,4 +1,3 @@
-// Enable client-side rendering
 "use client"
 
 import { auth, db } from "@/lib/firebase";

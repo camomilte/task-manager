@@ -20,6 +20,7 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 // Initialize Firestore with persistent cache for offline support and multi-tab sync
 let db; 
 
+
 try {
     db = initializeFirestore(app, {
         localCache: persistentLocalCache({
@@ -38,7 +39,7 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 // Export initialized services
-export {
+export {   
     db,
     auth,
     storage

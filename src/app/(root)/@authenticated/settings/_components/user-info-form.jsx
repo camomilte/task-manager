@@ -5,22 +5,21 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-// Import shadcn components
+// Import ui components
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Toaster } from "react-hot-toast";
 
 // Import context
 import { useAuth } from "@/context/authContext";
-import { Toaster } from "react-hot-toast";
 
 
 // Define schema for validation of form
@@ -34,8 +33,8 @@ const formSchema = z.object({
 
 
 export const UserInfoForm = ({ user }) => {
-      // Access authentication logic
-      const { updateUser, loading } = useAuth();
+  // Access authentication logic
+  const { updateUser, loading } = useAuth();
 
   // Initialize form
   const form = useForm({
@@ -84,7 +83,8 @@ export const UserInfoForm = ({ user }) => {
           }
         }}
       />
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 my-4">
+      
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mt-5">
         <FormField
           control={form.control}
           name="userName"
@@ -93,7 +93,7 @@ export const UserInfoForm = ({ user }) => {
               <div className="flex gap-4">
                 <FormLabel className="text-lg w-1/5">Username:</FormLabel>
                 <FormControl>
-                  <Input placeholder={user.userName} {...field} />
+                  <Input placeholder={user.userName} {...field} className="border-2 border-primary focus-visible:ring-secondary focus-visible:border-primary"/>
                 </FormControl>
               </div>
               <FormMessage />
@@ -108,7 +108,7 @@ export const UserInfoForm = ({ user }) => {
               <div className="flex gap-4">
                 <FormLabel className="text-lg w-1/5">Email:</FormLabel>
                 <FormControl>
-                  <Input disabled placeholder={user.email} {...field} />
+                  <Input disabled placeholder={user.email} {...field} className="border-2 border-primary focus-visible:ring-secondary focus-visible:border-primary" />
                 </FormControl>
               </div>
               <FormMessage />
