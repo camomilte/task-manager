@@ -1,12 +1,12 @@
 "use client"
 
 import { db } from "@/lib/firebase";
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { useAuth } from "./authContext";
 import { format } from "date-fns";
 
 // Import React hooks and functions
-const { createContext, useContext, useState, useEffect } = require("react");
+const { createContext, useContext, useState, useEffect, useMemo } = require("react");
 
 // Create context for task data
 const TasksContext = createContext();
@@ -20,7 +20,7 @@ export const TasksProvider = ({ children }) => {
   const { isAdmin, authLoaded, user } = useAuth();
 
   useEffect(() => {
-    if(!authLoaded || user) return;
+    if(!authLoaded || !user) return;
 
     setLoading(true);
     
@@ -38,14 +38,16 @@ export const TasksProvider = ({ children }) => {
     }
 
     const unsub = onSnapshot(q, querySnap => {
-      const updatedTasks = querySnap.map(doc => ({
+      const updatedTasks = querySnap.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
       setTasks(updatedTasks);
       setLoading(false);
     })
-  }, [isAdmin])
+    return () => unsub()
+
+  }, [isAdmin, user])
 
   const getNextOrder = () => {
     return Math.max(...tasks.map(task => task.order ?? 0), 0) + 1000
@@ -77,10 +79,56 @@ export const TasksProvider = ({ children }) => {
     }
   }
 
+  const completeTask = async (taskId) => {
+    setLoading(true)
+    try {
+      const taskRef = doc(db, "tasks", taskId)
+      await updateDoc(taskRef, {
+        completed: true
+      })
+    } catch (error) {
+      console.error("Error updating task: ", error);
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  /// /
+  // Function to get user by user and date
+  /// /
+  const getTaskByUserByDate = (uid, date) => {
+
+    const formatted = format(date, "yyyy-MM-dd"); // Ensure consistent format
+  return tasks
+    .filter(task =>
+      task.ownerId === uid &&
+      task.date === formatted
+    )
+    .sort((a, b) => a.order - b.order);
+
+
+
+    /* onst iso = useMemo(() => format(date, "yyyy-M-dd"),[date])
+
+    return useMemo(() => {
+      return tasks
+      // Filter tasks that belong to specified user and match given date
+      .filter(task => 
+        task.ownerId === uid && 
+        task.date === iso
+      )
+      // Sort tasks by their "order" field
+      .sort((a, b) => a.order - b.order)
+
+      }, [tasks, uid, iso]) */
+    }
+
   // Define value
   const value = {
     tasks,
     addTask,
+    getTaskByUserByDate,
+    completeTask,
     loading
   }
 

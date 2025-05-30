@@ -3,7 +3,7 @@
 // Import media
 import logoIcon from "../../public/logo-icon.svg";
 import { GoTasklist } from "react-icons/go";
-import { FaUser, FaUsers } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 import { BiSolidAddToQueue } from "react-icons/bi";
 
 // Import functions and components
@@ -13,10 +13,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { AvatarDropdown } from "./avatardropdown";
 import { useAuth } from "@/context/authContext";
+import { useSearchParams } from "next/navigation";
 
 export const Navbar = () => {
 
   const { isAdmin } = useAuth();
+ 
+  const searchParams = useSearchParams();
+  const date = searchParams.get("date");
 
   return (
     <nav className="flex items-center justify-between py-5">
@@ -36,7 +40,12 @@ export const Navbar = () => {
       {/* ---- DESKTOP NAV RIGHT ----- */}
       <div className="hidden md:flex gap-6 items-center">
         <Button asChild className="nav-btn">
-            <Link href="/tasks">Tasks</Link>
+            <Link href={`${
+              date 
+                ? `/?date=${date}`
+                : "/"
+              }`
+          }>Tasks</Link>
         </Button>
 
         {/* ---- ADMIN ONLY ---- */}
@@ -44,7 +53,11 @@ export const Navbar = () => {
           isAdmin() && (
             <>
               <Button asChild className="nav-btn">
-                <Link href="/all">Users</Link>
+                <Link href={`${
+                  date
+                    ? `/all/?date=${date}`
+                    : "/all"
+                }`}>All Tasks</Link>
               </Button>
               <Button asChild className="nav-btn">
                 <Link href="/add-task">Add task</Link>
@@ -59,7 +72,12 @@ export const Navbar = () => {
       {/* ---- MOBILE NAV RIGHT ---- */}
       <div className="flex gap-4 items-center md:hidden">
         <Button asChild className="nav-btn-mobile">
-          <Link href="/tasks"><GoTasklist className="size-5" /></Link>
+          <Link href={`${
+            date 
+              ? `/?date=${date}`
+              : "/"
+            }`
+          }><GoTasklist className="size-5" /></Link>
         </Button>
 
         {/* ---- ADMIN ONLY ---- */}
@@ -67,7 +85,11 @@ export const Navbar = () => {
           isAdmin() && (
             <>
               <Button asChild className="nav-btn-mobile">
-                <Link href="/all"><FaUsers className="size-5"/></Link>
+                <Link href={`${
+                  date
+                    ? `/all/?date=${date}`
+                    : "/all"
+                }`}><FaUsers className="size-5"/></Link>
               </Button>
               <Button asChild className="nav-btn-mobile">
                 <Link href="/add-task"><BiSolidAddToQueue className="size-5"/></Link>

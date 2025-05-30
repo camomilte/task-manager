@@ -2,7 +2,7 @@ import React from 'react';
 import { ThemeProvider } from './theme-provider';
 import { AuthProvider } from '@/context/authContext';
 import { UsersProvider } from '@/context/usersContext';
-import { TasksProvider } from '@/context/TasksContext';
+import { TasksProvider } from '@/context/tasksContext';
 
 function Providers({ children }) {
   return (

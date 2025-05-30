@@ -29,7 +29,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
 import { useUsers } from "@/context/usersContext";
 import { useRouter } from "next/navigation";
-import { TasksProvider, useTasks } from "@/context/TasksContext";
+import { TasksProvider, useTasks } from "@/context/tasksContext";
 
 // Base schema for all tasks
 const base = z.object({

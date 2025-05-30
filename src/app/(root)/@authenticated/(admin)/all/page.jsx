@@ -1,7 +1,9 @@
+import { Header } from "@/components/header"
+
 function AllPage() {
   return (
     <div>
-      All tasks
+      <Header />
     </div>
   )
 }
