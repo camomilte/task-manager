@@ -6,7 +6,7 @@ import { useAuth } from "./authContext";
 import { format } from "date-fns";
 
 // Import React hooks and functions
-const { createContext, useContext, useState, useEffect, useMemo } = require("react");
+const { createContext, useContext, useState, useEffect } = require("react");
 
 // Create context for task data
 const TasksContext = createContext();
@@ -79,6 +79,9 @@ export const TasksProvider = ({ children }) => {
     }
   }
 
+  /// / 
+  // Function to complete task
+  /// /
   const completeTask = async (taskId) => {
     setLoading(true)
     try {
@@ -99,28 +102,12 @@ export const TasksProvider = ({ children }) => {
   const getTaskByUserByDate = (uid, date) => {
 
     const formatted = format(date, "yyyy-MM-dd"); // Ensure consistent format
-  return tasks
-    .filter(task =>
-      task.ownerId === uid &&
-      task.date === formatted
-    )
-    .sort((a, b) => a.order - b.order);
-
-
-
-    /* onst iso = useMemo(() => format(date, "yyyy-M-dd"),[date])
-
-    return useMemo(() => {
-      return tasks
-      // Filter tasks that belong to specified user and match given date
-      .filter(task => 
-        task.ownerId === uid && 
-        task.date === iso
+    return tasks
+      .filter(task =>
+        task.ownerId === uid &&
+        task.date === formatted
       )
-      // Sort tasks by their "order" field
-      .sort((a, b) => a.order - b.order)
-
-      }, [tasks, uid, iso]) */
+      .sort((a, b) => a.order - b.order);
     }
 
   // Define value

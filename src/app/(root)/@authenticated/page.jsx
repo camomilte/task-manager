@@ -18,12 +18,12 @@ function HomePage() {
   const { user } = useAuth();
 
   return (
-    <>
-      <Header/>
+    <div className='mt-3 md:mt-10'>
+      <Header />
       <div className='mt-10'>
         <TaskCol date={selectedDate} user={user}/>
       </div>
-    </>
+    </div>
   )
 };
 

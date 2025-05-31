@@ -368,7 +368,18 @@ export const AddTaskForm = () => {
               </AlertDescription>
           </Alert>
         }
-        <Button disabled={loading || submitted} type="submit" className="font-bold w-full md:text-sm h-13 md:h-10 md:px-8 md:w-auto">{ loading ? "Creating..." : "Create task" } </Button>
+        <Button 
+          disabled={loading || submitted} 
+          type="submit" 
+          className="font-bold w-full md:text-sm h-13 md:h-10 md:px-8 md:w-auto"
+        >
+          {loading 
+            ? "Creating..." 
+            : submitted
+              ? "Created! Redirecting..."
+              : "Create task" 
+            } 
+          </Button>
       </form>
     </Form>
   )
